@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { BsStars } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { IoMdClose } from 'react-icons/io';
-import Button from '../../components/Button'
+import Button from '../../components/Button';
+import Notification from '../../components/Notification';
 
 const options = [
   {
@@ -26,39 +27,65 @@ const options = [
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [notification, setNotification] = useState<{message: string, isError: boolean} | null>(null);
+
+  const handleCheck = () => {
+    if (selectedId === null) return;
+    
+    if (selectedId === 3) {
+      setNotification({
+        message: 'إجابة صحيحة! أحسنت!',
+        isError: false
+      });
+    } else {
+      setNotification({
+        message: 'إجابة خاطئة! حاول مرة أخرى.',
+        isError: true
+      });
+    }
+  };
+
+  const handleSkip = () => {
+    setNotification({
+      message: 'تم تخطي السؤال!',
+      isError: false
+    });
+    setSelectedId(null);
+  };
 
   return (
     <div className="px-5 w-full lg:max-w-[70%] py-12 lg:mx-auto">
-      {/* Top bar */}
+      {notification && (
+        <Notification
+          message={notification.message}
+          isError={notification.isError}
+          onClose={() => setNotification(null)}
+        />
+      )}
+
       <div className="flex items-center gap-x-2">
-        {/* Lives counter */}
         <div className="flex items-center gap-x-1">
           <p className="text-red-500 font-bold text-lg">5</p>
           <AiFillHeart className="text-red-500 w-5 h-5" />
         </div>
 
-        {/* Progress bar */}
         <div className="bg-gray-200 rounded-full h-2 w-full">
           <div className="bg-[#e5e5e5] rounded-full h-2 transition-all duration-500" style={{ width: '30%' }} />
         </div>
 
-        {/* Close button */}
         <button className="text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
           <IoMdClose className="w-5 h-5" />
         </button>
       </div>
 
-      {/* New Word */}
       <h1 className="text-end text-xl font-bold mb-4 mt-4 text-[#d382fb] flex justify-end items-center gap-2">
         كلمة جديدة <BsStars className="text-white p-0.5 rounded-full bg-[#d382fb] h-5 w-5" />
       </h1>
 
-      {/* Question */}
       <h2 className="text-end text-xl font-semibold mb-8">
         أي واحدة من هذه "قهوة"؟
       </h2>
 
-      {/* Image Options */}
       <div className="grid grid-cols-1 mb-10 sm:grid-cols-2 md:grid-cols-3 max-w-full lg:max-w-[80%] mx-auto gap-6 justify-center">
         {options.map((option) => (
           <div
@@ -89,22 +116,22 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Action Buttons */}
       <div className="fixed bottom-0 left-0 right-0 bg-white pb-5 pt-2 px-5 border-t border-gray-200">
-  <div className="max-w-full lg:max-w-[70%] mx-auto">
-    <div className="flex justify-between gap-4">
-      <Button
-        variant="secondary"
-        disabled={selectedId === null}
-      >
-        تحقق
-      </Button>
-      <Button variant="outline">
-        تخطي
-      </Button>
-    </div>
-  </div>
-</div>
+        <div className="max-w-full lg:max-w-[70%] mx-auto">
+          <div className="flex justify-between gap-4">
+            <Button
+              variant="secondary"
+              disabled={selectedId === null}
+              onClick={handleCheck}
+            >
+              تحقق
+            </Button>
+            <Button variant="outline" onClick={handleSkip}>
+              تخطي
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
