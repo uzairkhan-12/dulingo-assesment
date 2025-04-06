@@ -1,113 +1,110 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+'use client';
+import { useState } from 'react';
+import Image from 'next/image';
+import { BsStars } from 'react-icons/bs';
+import { AiFillHeart } from 'react-icons/ai';
+import { IoMdClose } from 'react-icons/io';
+import Button from '../../components/Button'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const options = [
+  {
+    id: 3,
+    label: 'coffee',
+    image: '/coffe.png',
+  },
+  {
+    id: 2,
+    label: 'tea',
+    image: '/tea.png',
+  },
+  {
+    id: 1,
+    label: 'milk',
+    image: '/milk.png',
+  },
+];
 
 export default function Home() {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="px-5 w-full lg:max-w-[70%] py-12 lg:mx-auto">
+      {/* Top bar */}
+      <div className="flex items-center gap-x-2">
+        {/* Lives counter */}
+        <div className="flex items-center gap-x-1">
+          <p className="text-red-500 font-bold text-lg">5</p>
+          <AiFillHeart className="text-red-500 w-5 h-5" />
+        </div>
+
+        {/* Progress bar */}
+        <div className="bg-gray-200 rounded-full h-2 w-full">
+          <div className="bg-[#e5e5e5] rounded-full h-2 transition-all duration-500" style={{ width: '30%' }} />
+        </div>
+
+        {/* Close button */}
+        <button className="text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
+          <IoMdClose className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* New Word */}
+      <h1 className="text-end text-xl font-bold mb-4 mt-4 text-[#d382fb] flex justify-end items-center gap-2">
+        كلمة جديدة <BsStars className="text-white p-0.5 rounded-full bg-[#d382fb] h-5 w-5" />
+      </h1>
+
+      {/* Question */}
+      <h2 className="text-end text-xl font-semibold mb-8">
+        أي واحدة من هذه "قهوة"؟
+      </h2>
+
+      {/* Image Options */}
+      <div className="grid grid-cols-1 mb-10 sm:grid-cols-2 md:grid-cols-3 max-w-full lg:max-w-[80%] mx-auto gap-6 justify-center">
+        {options.map((option) => (
+          <div
+            key={option.id}
+            onClick={() => setSelectedId(option.id)}
+            className={`flex flex-col items-center border rounded-xl p-4 cursor-pointer transition-all
+              ${selectedId === option.id
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 hover:bg-gray-100'}
+            `}
           >
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src={option.image}
+              alt={option.label}
+              width={400}
+              height={400}
+              className="mb-4 rounded-md object-contain"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className='flex justify-between w-full items-center'>
+              <span className="text-gray-400 border border-gray-300 rounded-lg px-2 py-1 mt-1">
+                {option.id}
+              </span>
+              <p className="text-sm text-gray-800 font-semibold">
+                {option.label}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white pb-5 pt-2 px-5 border-t border-gray-200">
+  <div className="max-w-full lg:max-w-[70%] mx-auto">
+    <div className="flex justify-between gap-4">
+      <Button
+        variant="secondary"
+        disabled={selectedId === null}
+      >
+        تحقق
+      </Button>
+      <Button variant="outline">
+        تخطي
+      </Button>
+    </div>
+  </div>
+</div>
     </div>
   );
 }
